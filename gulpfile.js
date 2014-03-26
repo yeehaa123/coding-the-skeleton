@@ -32,3 +32,4 @@ gulp.task('watch', function(){
 });
 
 gulp.task('default', ['generateCss', 'lint', 'watch']);
+gulp.task('test', ['generateCss', 'lint']);

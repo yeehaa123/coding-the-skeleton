@@ -14,7 +14,7 @@
     "gulp-sass": "~0.7.1"
   },
   "scripts": {
-    "test": "gulp --verbose"
+    "test": "gulp test --verbose"
   },
   "author": "",
   "license": "ISC"
