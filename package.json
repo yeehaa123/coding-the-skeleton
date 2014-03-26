@@ -4,7 +4,8 @@
     "gulp-sass": "~0.7.1",
     "gulp-jshint": "~1.5.1",
     "gulp-mocha": "~0.4.1",
-    "jshint-stylish": "~0.1.5"
+    "jshint-stylish": "~0.1.5",
+    "mocha": "~1.18.2"
   },
   "name": "ast2014",
   "version": "0.0.1",
