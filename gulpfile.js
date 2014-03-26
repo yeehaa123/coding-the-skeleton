@@ -9,27 +9,26 @@ var paths = {
 }
 
 gulp.task('clean', function(){
-  gulp.src(['./dev', './dist'], {read: false})
+  gulp.src(['./build'], {read: false})
       .pipe(clean());
 });
 
-gulp.task('lint', function(){
+gulp.task('lintJS', function(){
   gulp.src(paths.js)
       .pipe(jshint())
       .pipe(jshint.reporter('default'));
 });
 
-gulp.task('generateCss', function(){
+gulp.task('generateCSS', function(){
   gulp.src(paths.sass)
       .pipe(sass())
-      .pipe(gulp.dest('./dev/styles'))
-      .pipe(gulp.dest('./dist/styles'));
+      .pipe(gulp.dest('./build/styles'))
 });
 
 gulp.task('watch', function(){
-  gulp.watch(paths.sass, ['generateCss']);
+  gulp.watch(paths.sass, ['generateCSS']);
   gulp.watch(paths.js, ['lint']);
 });
 
-gulp.task('default', ['generateCss', 'lint', 'watch']);
-gulp.task('test', ['generateCss', 'lint']);
+gulp.task('default', ['generateCSS', 'lintJS', 'watch']);
+gulp.task('test', ['generateCSS', 'lintJS']);
