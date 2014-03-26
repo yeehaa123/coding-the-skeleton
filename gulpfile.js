@@ -3,6 +3,7 @@ var sass   = require('gulp-sass');
 var jshint = require('gulp-jshint');
 var clean  = require('gulp-clean');
 var mocha  = require('gulp-mocha');
+var stylish = require('jshint-stylish'); 
 
 var paths = {
   sass: './src/styles/main.scss',
@@ -21,7 +22,8 @@ gulp.task('clean', function(){
 gulp.task('lintJS', function(){
   gulp.src(paths.js.all)
       .pipe(jshint())
-      .pipe(jshint.reporter('default'));
+      .pipe(jshint.reporter(stylish))
+      .pipe(jshint.reporter('fail'));
 });
 
 gulp.task('testJS', function(){
