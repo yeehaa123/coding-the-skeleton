@@ -1,0 +1,16 @@
+{
+  "name": "ast2014",
+  "version": "0.0.0",
+  "authors": [
+    "Yeehaa <medialoperations@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {}
+}

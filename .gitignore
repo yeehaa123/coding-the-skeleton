@@ -1,0 +1,9 @@
+# Output Directories
+
+dist
+dev
+
+# Node Modules
+
+node_modules
+bower_components

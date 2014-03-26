@@ -1,0 +1,21 @@
+{
+  "devDependencies": {
+    "gulp": "~3.5.6",
+    "gulp-sass": "~0.7.1",
+    "gulp-jshint": "~1.5.1"
+  },
+  "name": "ast2014",
+  "version": "0.0.1",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "~3.5.6",
+    "gulp-clean": "~0.2.4",
+    "gulp-jshint": "~1.5.1",
+    "gulp-sass": "~0.7.1"
+  },
+  "scripts": {
+    "test": "gulp --verbose"
+  },
+  "author": "",
+  "license": "ISC"
+}
