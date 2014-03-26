@@ -2,10 +2,15 @@ var gulp   = require('gulp');
 var sass   = require('gulp-sass');
 var jshint = require('gulp-jshint');
 var clean  = require('gulp-clean');
+var mocha  = require('gulp-mocha');
 
 var paths = {
   sass: './src/styles/main.scss',
-  js: './src/**/*.js'
+  js: { 
+    all: ['./src/app/**/*.js','./src/server/**/*.js'],
+    client: './src/app/**/*.js',
+    server: './src/server/**/*.js'
+  }
 }
 
 gulp.task('clean', function(){
@@ -14,9 +19,14 @@ gulp.task('clean', function(){
 });
 
 gulp.task('lintJS', function(){
-  gulp.src(paths.js)
+  gulp.src(paths.js.all)
       .pipe(jshint())
       .pipe(jshint.reporter('default'));
+});
+
+gulp.task('testJS', function(){
+  gulp.src(paths.js.server)
+      .pipe(mocha({reporter: 'nyan'}));
 });
 
 gulp.task('generateCSS', function(){
@@ -27,8 +37,8 @@ gulp.task('generateCSS', function(){
 
 gulp.task('watch', function(){
   gulp.watch(paths.sass, ['generateCSS']);
-  gulp.watch(paths.js, ['lint']);
+  gulp.watch(paths.js.all, ['lintJS']);
 });
 
-gulp.task('default', ['generateCSS', 'lintJS', 'watch']);
-gulp.task('test', ['generateCSS', 'lintJS']);
+gulp.task('default', ['generateCSS', 'lintJS', 'testJS', 'watch']);
+gulp.task('test', ['generateCSS', 'lintJS', 'testJS']);

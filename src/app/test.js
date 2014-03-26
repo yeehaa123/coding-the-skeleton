@@ -1,2 +1,2 @@
 var Bye = "bye";
-var by = "by";
+var by = "by"
