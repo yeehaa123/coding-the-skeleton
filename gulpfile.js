@@ -33,7 +33,7 @@ gulp.task('lintJS', function(){
 gulp.task('testServer', function(){
   require('coffee-script/register');
   return gulp.src(paths.tests.server)
-             .pipe(mocha({reporter: 'list'}));
+             .pipe(mocha({reporter: 'list'}))
 });
 
 gulp.task('generateCSS', function(){
@@ -49,4 +49,15 @@ gulp.task('watch', function(){
 });
 
 gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);
-gulp.task('test', ['generateCSS', 'lintJS', 'testServer'])
+gulp.task('test', ['generateCSS', 'lintJS', 'testServer']);
+
+// gulp.task('integrate', ['test'], function(){
+//   console.log("1. Make sure 'git status' is clean.");
+//   console.log("2. Build on the integration box.");
+//   console.log("   a. 'git push'");
+//   console.log("   c. 'heroku addons:open werker'");
+//   console.log("   d. If wercker fails, stop! Try again after fixing the issue.");
+//   console.log("3. 'git checkout integration'");
+//   console.log("4. 'git merge master --no-ff --log'");
+//   console.log("5. 'git checkout master'");
+// });

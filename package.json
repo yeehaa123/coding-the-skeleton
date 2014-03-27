@@ -2,26 +2,21 @@
   "name": "ast2014",
   "version": "0.0.1",
   "main": "gulpfile.js",
-
-  "dependencies": {
-  },
-
+  "dependencies": {},
   "scripts": {
     "test": "gulp test --verbose"
   },
-
   "devDependencies": {
     "gulp": "~3.5.6",
     "gulp-clean": "~0.2.4",
     "gulp-sass": "~0.7.1",
     "gulp-jshint": "~1.5.1",
-    "gulp-mocha": "~0.4.1",
     "jshint-stylish": "~0.1.5",
     "mocha": "~1.18.2",
     "chai": "~1.9.1",
-    "coffee-script": "~1.7.1"
+    "coffee-script": "~1.7.1",
+    "gulp-mocha": "~0.4.1"
   },
-
-  "author": "",
+  "author": "Yeehaa",
   "license": "ISC"
 }
