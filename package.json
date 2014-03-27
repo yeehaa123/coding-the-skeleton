@@ -15,7 +15,8 @@
     "mocha": "~1.18.2",
     "chai": "~1.9.1",
     "coffee-script": "~1.7.1",
-    "gulp-mocha": "~0.4.1"
+    "gulp-mocha": "~0.4.1",
+    "gulp-batch": "~0.4.1"
   },
   "author": "Yeehaa",
   "license": "ISC"

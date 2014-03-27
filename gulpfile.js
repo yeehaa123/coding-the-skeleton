@@ -6,6 +6,7 @@ var jshint = require('gulp-jshint');
 var clean  = require('gulp-clean');
 var mocha  = require('gulp-mocha');
 var stylish = require('jshint-stylish'); 
+var batch = require('gulp-batch'); 
 
 var paths = {
   sass: './src/styles/main.scss',
@@ -32,8 +33,7 @@ gulp.task('lintJS', function(){
 
 gulp.task('testServer', function(){
   require('coffee-script/register');
-  return gulp.src(paths.tests.server)
-             .pipe(mocha({reporter: 'list'}))
+  return gulp.src(paths.tests.server).pipe(mocha({reporter: 'list'}));
 });
 
 gulp.task('generateCSS', function(){
@@ -45,19 +45,24 @@ gulp.task('generateCSS', function(){
 gulp.task('watch', function(){
   gulp.watch(paths.sass, ['generateCSS']);
   gulp.watch(paths.js.all, ['lintJS']);
-  gulp.watch(paths.tests.coffee, ['testServer']);
+  gulp.watch(paths.tests.server, ['testServer']);
 });
 
 gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);
-gulp.task('test', ['generateCSS', 'lintJS', 'testServer']);
 
-// gulp.task('integrate', ['test'], function(){
-//   console.log("1. Make sure 'git status' is clean.");
-//   console.log("2. Build on the integration box.");
-//   console.log("   a. 'git push'");
-//   console.log("   c. 'heroku addons:open werker'");
-//   console.log("   d. If wercker fails, stop! Try again after fixing the issue.");
-//   console.log("3. 'git checkout integration'");
-//   console.log("4. 'git merge master --no-ff --log'");
-//   console.log("5. 'git checkout master'");
-// });
+gulp.task('test', ['generateCSS', 'lintJS', 'testServer'], function(){
+  this.on('task_stop', function onTestStop(){
+    process.exit(1);
+  });
+});
+
+gulp.task('integrate', ['test'], function(){
+  console.log("1. Make sure 'git status' is clean.");
+  console.log("2. Build on the integration box.");
+  console.log("   a. 'git push'");
+  console.log("   c. 'heroku addons:open werker'");
+  console.log("   d. If wercker fails, stop! Try again after fixing the issue.");
+  console.log("3. 'git checkout integration'");
+  console.log("4. 'git merge master --no-ff --log'");
+  console.log("5. 'git checkout master'");
+});
