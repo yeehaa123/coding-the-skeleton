@@ -6,11 +6,11 @@ expect = require('chai').expect
 
 describe 'server', -> 
   after ()->
-    server.stop ->
-      console.log("stopped")
+    server.stop()
 
   describe 'basic behaviour', ->
     it 'should start the server', (done)->
       server.start()
       http.get 'http://localhost:8080', (response) ->
+        expect(response.statusCode).to.equal 200
         done()

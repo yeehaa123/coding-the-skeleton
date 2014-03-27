@@ -4,14 +4,14 @@ var http = require('http');
 var server;
 
 exports.start = function(){
-  console.log("start called");
   server = http.createServer();
   server.on("request", function(request, response) {
-    response.end();
+    var body = "<h1>Hello World</h1>";
+    response.end(body);
   });
   server.listen(8080);
 };
 
-exports.stop = function(callback){
-  server.close(callback);
+exports.stop = function(){
+  server.close();
 };

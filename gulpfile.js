@@ -33,7 +33,7 @@ gulp.task('lintJS', function(){
 
 gulp.task('testServer', function(){
   require('coffee-script/register');
-  return gulp.src(paths.tests.server).pipe(mocha({reporter: 'list'}));
+  return gulp.src(paths.tests.server).pipe(mocha({reporter: 'nyan'}));
 });
 
 gulp.task('generateCSS', function(){
@@ -52,7 +52,7 @@ gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);
 
 gulp.task('test', ['generateCSS', 'lintJS', 'testServer'], function(){
   this.on('task_stop', function onTestStop(){
-    process.exit(1);
+    process.exit(0);
   });
 });
 
