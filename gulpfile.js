@@ -15,7 +15,7 @@ var paths = {
     server: './src/server/**/*.js'
   },
   tests: {
-    all: './test/**/*.js'
+    server: './test/**/*.coffee',
   }
 }
 
@@ -28,11 +28,11 @@ gulp.task('lintJS', function(){
   return gulp.src(paths.js.all)
       .pipe(jshint('.jshintrc'))
       .pipe(jshint.reporter(stylish))
-      .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('testJS', function(){
-  return gulp.src(paths.tests.all)
+gulp.task('testServer', function(){
+  require('coffee-script/register');
+  return gulp.src(paths.tests.server)
              .pipe(mocha({reporter: 'list'}));
 });
 
@@ -45,8 +45,8 @@ gulp.task('generateCSS', function(){
 gulp.task('watch', function(){
   gulp.watch(paths.sass, ['generateCSS']);
   gulp.watch(paths.js.all, ['lintJS']);
-  gulp.watch(paths.tests.all, ['testJS']);
+  gulp.watch(paths.tests.coffee, ['testServer']);
 });
 
-gulp.task('default', ['generateCSS', 'lintJS', 'testJS', 'watch']);
-gulp.task('test', ['generateCSS', 'lintJS', 'testJS'])
+gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);
+gulp.task('test', ['generateCSS', 'lintJS', 'testServer'])
