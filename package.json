@@ -19,5 +19,6 @@
     "gulp-batch": "~0.4.1"
   },
   "author": "Yeehaa",
-  "license": "ISC"
+  "license": "ISC",
+  "engine": "node >= 0.10.25"
 }
