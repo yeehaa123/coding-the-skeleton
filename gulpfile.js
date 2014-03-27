@@ -12,8 +12,10 @@ var paths = {
   js: { 
     all: ['./src/app/**/*.js','./src/server/**/*.js'],
     client: './src/app/**/*.js',
-    server: './src/server/**/*.js',
-    tests: './test/**/*.js'
+    server: './src/server/**/*.js'
+  },
+  tests: {
+    all: './test/**/*.js'
   }
 }
 
@@ -30,8 +32,8 @@ gulp.task('lintJS', function(){
 });
 
 gulp.task('testJS', function(){
-  return gulp.src([paths.js.test], {read: false})
-      .pipe(mocha({reporter: 'nyan'}));
+  return gulp.src(paths.tests.all)
+             .pipe(mocha({reporter: 'list'}));
 });
 
 gulp.task('generateCSS', function(){
@@ -43,7 +45,8 @@ gulp.task('generateCSS', function(){
 gulp.task('watch', function(){
   gulp.watch(paths.sass, ['generateCSS']);
   gulp.watch(paths.js.all, ['lintJS']);
+  gulp.watch(paths.tests.all, ['testJS']);
 });
 
 gulp.task('default', ['generateCSS', 'lintJS', 'testJS', 'watch']);
-gulp.task('test', ['generateCSS', 'lintJS']);
+gulp.task('test', ['generateCSS', 'lintJS', 'testJS'])
