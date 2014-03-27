@@ -50,11 +50,7 @@ gulp.task('watch', function(){
 
 gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);
 
-gulp.task('test', ['generateCSS', 'lintJS', 'testServer'], function(){
-  this.on('task_stop', function onTestStop(){
-    process.exit(0);
-  });
-});
+gulp.task('test', ['generateCSS', 'lintJS', 'testServer']);
 
 gulp.task('integrate', ['test'], function(){
   console.log("1. Make sure 'git status' is clean.");
