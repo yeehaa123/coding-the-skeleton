@@ -37,7 +37,7 @@ gulp.task('lintJS', function(){
 
 gulp.task('testServer', ['createTestDir'], function(){
   require('coffee-script/register');
-  return gulp.src(paths.tests.server).pipe(mocha({reporter: 'nyan'}));
+  return gulp.src(paths.tests.server).pipe(mocha({reporter: 'spec'}));
 });
 
 gulp.task('generateCSS', function(){
@@ -46,18 +46,19 @@ gulp.task('generateCSS', function(){
       .pipe(gulp.dest('./build/styles'))
 });
 
-gulp.task('watch', function(){
-  gulp.watch(paths.sass, ['generateCSS']);
-  gulp.watch(paths.js.all, ['lintJS']);
-  gulp.watch(paths.tests.server, ['testServer']);
-});
-
 gulp.task('createTestDir', function(){
   if (fs.existsSync('./generated/test')){
     rimraf.sync('./generated/test');
   };
   mkdirp.sync('./generated/test');
 });
+
+gulp.task('watch', function(){
+  gulp.watch(paths.sass, ['generateCSS']);
+  gulp.watch(paths.js.all, ['lintJS']);
+  gulp.watch(paths.tests.server, ['testServer']);
+});
+
 
 gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);
 

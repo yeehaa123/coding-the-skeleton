@@ -54,3 +54,17 @@ describe 'server', ->
        response.on 'end', ->
          server.stop ->
            done()
+
+  describe 'routing', ->
+    it 'should return a 404 for everything but homepage', ->
+     server.start(testFile, PORT)
+     request = http.get 'http://localhost:8080/blabla'
+
+     request.on 'response', (response) ->
+       response.setEncoding('utf8')
+       expect(response.statusCode).to.equal 404
+
+       response.on 'end', ->
+         server.stop ->
+           done()
+
