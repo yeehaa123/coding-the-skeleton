@@ -6,44 +6,47 @@ fs = require('fs')
 PORT = 8080
 
 testDir  = 'generated/test'
-testFile = "#{testDir}/test.html"
-
+homePageFile = "#{testDir}/homepage.html"
+errorPageFile = "#{testDir}/errorpage.html"
 
 describe 'server', -> 
 
   describe 'basic functionality', (done) ->
 
     it 'should throw an exception if port is not specified', (done) ->
-      expect(-> server.start(testFile)).to.throw(/Port number is not specified/)
+      expect(-> server.start(homePageFile)).to.throw(/Port number is not specified/)
       done()
 
     it 'should throw an exception if stop is called twice', (done) ->
-       server.start(testFile, PORT)
+       server.start(homePageFile, errorPageFile, PORT)
        server.stop()
        expect(-> server.stop()).to.throw(/Not running/)
        done()
 
-    it 'should throw an exception if file to serve is not specified', (done) ->
-      expect(-> server.start(null, PORT)).to.throw(/HTML file to serve is not specified/)
+    it 'should throw an exception if homepage to serve is not specified', (done) ->
+      expect(-> server.start(null, errorPageFile, PORT)).to.throw(/homepage to serve is not specified/)
       done()
 
-  describe 'static file serving', ->
-    testData = "Hello World"
+    it 'should throw an exception if 404 page to serve is not specified', (done) ->
+      expect(-> server.start(homePageFile, null, PORT)).to.throw(/error page to serve is not specified/)
+      done()
 
-    before (done) ->
-     fs.writeFileSync(testFile, testData)
-     expect(fs.existsSync(testFile)).to.be.ok
-     done()
+
+  describe 'static file serving', -> 
+
 
     after (done) ->
-      fs.unlinkSync(testFile)
-      expect(!fs.existsSync(testFile)).to.be.ok
+      cleanUpFiles([homePageFile, errorPageFile])
       done()
 
     it 'should return homepage when asked for /', (done) ->
+
+      expectedHomePageData = "Hello World"
+      createFile(homePageFile, expectedHomePageData)
+
       httpGet 'http://localhost:8080', (response, responseData) ->
         expect(response.statusCode).to.equal 200
-        expect(responseData).to.equal testData
+        expect(responseData).to.equal expectedHomePageData
         done()
 
     it 'should return homepage when asked for index', (done) ->
@@ -52,13 +55,27 @@ describe 'server', ->
         done()
 
     it 'should return a 404 for everything but homepage', (done) ->
+
+      expectedErrorPageData = "Page Not Found"
+      createFile(errorPageFile, expectedErrorPageData)
+
       httpGet 'http://localhost:8080/blabla', (response, responseData) ->
         expect(response.statusCode).to.equal 404
+        expect(responseData).to.equal expectedErrorPageData
         done()
 
 
+createFile = (file, data) ->
+  fs.writeFileSync(file, data)
+  expect(fs.existsSync(file)).to.be.ok
+
+cleanUpFiles = (files) ->
+  files.forEach (file) ->
+    fs.unlinkSync(file)
+    expect(!fs.existsSync(file)).to.be.ok
+
 httpGet = (url, callback) ->
-  server.start(testFile, PORT);
+  server.start(homePageFile, errorPageFile, PORT);
   request = http.get url
 
   request.on 'response', (response) ->

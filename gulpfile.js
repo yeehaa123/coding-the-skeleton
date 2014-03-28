@@ -60,7 +60,7 @@ gulp.task('createTestDir', function(){
 gulp.task('watch', function(){
   watching = true;
   gulp.watch(paths.sass, ['generateCSS']);
-  gulp.watch(paths.js.all, ['lintJS']);
+  gulp.watch(paths.js.all, ['lintJS', 'testServer']);
   gulp.watch(paths.tests.server, ['testServer']);
 });
 
