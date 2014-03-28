@@ -1,12 +1,16 @@
 'use strict'
 
-var gulp   = require('gulp');
-var sass   = require('gulp-sass');
-var jshint = require('gulp-jshint');
-var clean  = require('gulp-clean');
-var mocha  = require('gulp-mocha');
+var fs      = require('fs');
+var mkdirp  = require('mkdirp');
+var rimraf  = require('rimraf');
+
+var gulp    = require('gulp');
+var sass    = require('gulp-sass');
+var jshint  = require('gulp-jshint');
+var clean   = require('gulp-clean');
+var mocha   = require('gulp-mocha');
 var stylish = require('jshint-stylish'); 
-var batch = require('gulp-batch'); 
+var batch   = require('gulp-batch'); 
 
 var paths = {
   sass: './src/styles/main.scss',
@@ -21,7 +25,7 @@ var paths = {
 }
 
 gulp.task('clean', function(){
-  return gulp.src(['./build'], {read: false})
+  return gulp.src(['./build', './generated'], {read: false})
       .pipe(clean());
 });
 
@@ -31,7 +35,7 @@ gulp.task('lintJS', function(){
       .pipe(jshint.reporter(stylish))
 });
 
-gulp.task('testServer', function(){
+gulp.task('testServer', ['createTestDir'], function(){
   require('coffee-script/register');
   return gulp.src(paths.tests.server).pipe(mocha({reporter: 'nyan'}));
 });
@@ -46,6 +50,13 @@ gulp.task('watch', function(){
   gulp.watch(paths.sass, ['generateCSS']);
   gulp.watch(paths.js.all, ['lintJS']);
   gulp.watch(paths.tests.server, ['testServer']);
+});
+
+gulp.task('createTestDir', function(){
+  if (fs.existsSync('./generated/test')){
+    rimraf.sync('./generated/test');
+  };
+  mkdirp.sync('./generated/test');
 });
 
 gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);

@@ -1,9 +1,10 @@
 # Output Directories
 
-dist
-dev
+dist/
+dev/
+generated/
 
 # Node Modules
 
-node_modules
-bower_components
+node_modules/
+bower_components/
