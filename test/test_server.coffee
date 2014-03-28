@@ -9,48 +9,48 @@ expect = require('chai').expect
 describe 'server', -> 
   PORT = 8080
 
-  describe 'basic functionality', ->
+  testDir  = 'generated/test'
+  testFile = "#{testDir}/test.html"
 
-    it 'should return hello world', (done)->
-      server.start(PORT)
-
-      request = http.get 'http://localhost:8080'
-
-      request.on 'response', (response) ->
-        response.setEncoding('utf8')
-        expect(response.statusCode).to.equal 200
-
-        response.on 'data', (chunk) -> 
-          expect(chunk).to.equal "Hello World"
-
-        response.on 'end', ->
-          server.stop ->
-            done()
-
-    it 'should run a callback after it stops', (done) ->
-      server.start(PORT)
-      server.stop ->
-        done()
-
+  describe 'basic functionality', (done) ->
     it 'should throw an exception if port is not specified', (done) ->
-      expect(-> server.start()).to.throw(/Port number is not specified/)
+      expect(-> server.start(testFile)).to.throw(/Port number is not specified/)
       done()
 
-
     it 'should throw an exception if stop is called twice', (done) ->
-       server.start(PORT)
+       server.start(testFile, PORT)
        server.stop()
        expect(-> server.stop()).to.throw(/Not running/)
        done()
 
-   describe 'file serving', ->
-     it 'should serve a file', (done) ->
-       testDir  = 'generated/test'
-       testFile = "#{testDir}/test.html"
+    it 'should throw an exception if file to serve is not specified', (done) ->
+      expect(-> server.start(null, PORT)).to.throw(/HTML file to serve is not specified/)
+      done()
 
-       try 
-         fs.writeFileSync(testFile, 'Hello World')
-         done()
-       finally
-         fs.unlinkSync(testFile)
-         expect(!fs.existsSync(testFile)).to.equal(true)
+  describe 'static file serving', ->
+    testData = "Hello World"
+
+    before (done) ->
+     fs.writeFileSync(testFile, testData)
+     expect(fs.existsSync(testFile)).to.be.ok
+     done()
+
+    after (done) ->
+      fs.unlinkSync(testFile)
+      expect(!fs.existsSync(testFile)).to.be.ok
+      done()
+
+    it 'should serve a file', (done) ->
+     server.start(testFile, PORT)
+     request = http.get 'http://localhost:8080'
+
+     request.on 'response', (response) ->
+       response.setEncoding('utf8')
+       expect(response.statusCode).to.equal 200
+
+       response.on 'data', (chunk) -> 
+         expect(chunk).to.equal testData
+
+       response.on 'end', ->
+         server.stop ->
+           done()
