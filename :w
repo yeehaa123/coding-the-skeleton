@@ -2,18 +2,17 @@ server = require("../src/server/server.js")
 
 http = require('http')
 fs = require('fs')
-PORT = 8080
-
-testDir  = 'generated/test'
-testFile = "#{testDir}/test.html"
 
 expect = require('chai').expect
 
 
 describe 'server', -> 
+  PORT = 8080
+
+  testDir  = 'generated/test'
+  testFile = "#{testDir}/test.html"
 
   describe 'basic functionality', (done) ->
-
     it 'should throw an exception if port is not specified', (done) ->
       expect(-> server.start(testFile)).to.throw(/Port number is not specified/)
       done()
@@ -27,11 +26,6 @@ describe 'server', ->
     it 'should throw an exception if file to serve is not specified', (done) ->
       expect(-> server.start(null, PORT)).to.throw(/HTML file to serve is not specified/)
       done()
-
-    it 'should return a 404 for everything but homepage', (done) ->
-      httpGet 'http://localhost:8080/blabla', (response, responseData) ->
-        expect(response.statusCode).to.equal 404
-        done()
 
   describe 'static file serving', ->
     testData = "Hello World"
@@ -47,14 +41,27 @@ describe 'server', ->
       done()
 
     it 'should serve a file', (done) ->
-      httpGet 'http://localhost:8080', (response, responseData) ->
-        expect(response.statusCode).to.equal 200
-        expect(responseData).to.equal testData
-        done()
+     server.start(testFile, PORT)
+     request = http.get 'http://localhost:8080'
 
+     request.on 'response', (response) ->
+       response.setEncoding('utf8')
+       expect(response.statusCode).to.equal 200
+
+       response.on 'data', (chunk) -> 
+         expect(chunk).to.equal testData
+
+       response.on 'end', ->
+         server.stop ->
+           done()
+
+  describe 'routing', ->
+    it 'should return a 404 for everything but homepage', ->
+      httpGet 'http:/localhost:8080/blabla', (response, responseData) ->
+        expect(response.statusCode).to.equal 404
 
 httpGet = (url, callback) ->
-  server.start(testFile, PORT);
+  server.start('test', PORT)
   request = http.get url
 
   request.on 'response', (response) ->
@@ -62,7 +69,6 @@ httpGet = (url, callback) ->
     response.setEncoding('utf8')
 
     response.on 'data', (chunk) -> 
-      receivedData += chunk
 
     response.on 'end', ->
       server.stop ->
