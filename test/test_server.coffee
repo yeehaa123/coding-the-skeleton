@@ -1,4 +1,5 @@
 server = require("../src/server/server.js")
+expect = require('chai').expect
 
 http = require('http')
 fs = require('fs')
@@ -6,8 +7,6 @@ PORT = 8080
 
 testDir  = 'generated/test'
 testFile = "#{testDir}/test.html"
-
-expect = require('chai').expect
 
 
 describe 'server', -> 
@@ -28,11 +27,6 @@ describe 'server', ->
       expect(-> server.start(null, PORT)).to.throw(/HTML file to serve is not specified/)
       done()
 
-    it 'should return a 404 for everything but homepage', (done) ->
-      httpGet 'http://localhost:8080/blabla', (response, responseData) ->
-        expect(response.statusCode).to.equal 404
-        done()
-
   describe 'static file serving', ->
     testData = "Hello World"
 
@@ -46,10 +40,20 @@ describe 'server', ->
       expect(!fs.existsSync(testFile)).to.be.ok
       done()
 
-    it 'should serve a file', (done) ->
+    it 'should return homepage when asked for /', (done) ->
       httpGet 'http://localhost:8080', (response, responseData) ->
         expect(response.statusCode).to.equal 200
         expect(responseData).to.equal testData
+        done()
+
+    it 'should return homepage when asked for index', (done) ->
+      httpGet 'http://localhost:8080/index.html', (response, responseData) ->
+        expect(response.statusCode).to.equal 200
+        done()
+
+    it 'should return a 404 for everything but homepage', (done) ->
+      httpGet 'http://localhost:8080/blabla', (response, responseData) ->
+        expect(response.statusCode).to.equal 404
         done()
 
 

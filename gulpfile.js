@@ -12,6 +12,8 @@ var mocha   = require('gulp-mocha');
 var stylish = require('jshint-stylish'); 
 var batch   = require('gulp-batch'); 
 
+var watching = false;
+
 var paths = {
   sass: './src/styles/main.scss',
   js: { 
@@ -37,7 +39,9 @@ gulp.task('lintJS', function(){
 
 gulp.task('testServer', ['createTestDir'], function(){
   require('coffee-script/register');
-  return gulp.src(paths.tests.server).pipe(mocha({reporter: 'spec'}));
+  return gulp.src(paths.tests.server)
+             .pipe(mocha({reporter: 'spec'}))
+             .on('error', onError);
 });
 
 gulp.task('generateCSS', function(){
@@ -54,6 +58,7 @@ gulp.task('createTestDir', function(){
 });
 
 gulp.task('watch', function(){
+  watching = true;
   gulp.watch(paths.sass, ['generateCSS']);
   gulp.watch(paths.js.all, ['lintJS']);
   gulp.watch(paths.tests.server, ['testServer']);
@@ -74,3 +79,10 @@ gulp.task('integrate', ['test'], function(){
   console.log("4. 'git merge master --no-ff --log'");
   console.log("5. 'git checkout master'");
 });
+
+function onError(err) {
+  console.log(err.toString());
+  if (watching) {
+    this.emit('end');
+  }
+}
