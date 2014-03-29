@@ -19,7 +19,8 @@
     "gulp-batch": "~0.4.1",
     "mkdirp": "~0.3.5",
     "rimraf": "~2.2.6",
-    "should": "~3.2.0-beta1"
+    "should": "~3.2.0-beta1",
+    "procfile": "~0.1.1"
   },
   "author": "Yeehaa",
   "license": "ISC",
