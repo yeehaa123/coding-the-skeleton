@@ -1,7 +1,6 @@
 {
-  "name": "ast2014",
+  "name": "coding-the-skeleton",
   "version": "0.0.1",
-  "main": "gulpfile.js",
   "dependencies": {},
   "scripts": {
     "test": "gulp test --verbose"
@@ -24,5 +23,8 @@
   },
   "author": "Yeehaa",
   "license": "ISC",
-  "engine": "node >= 0.10.25"
+  "engines": {
+    "node":  ">= 0.10.25",
+    "npm": ">= 1.4.0"
+  }
 }
