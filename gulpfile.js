@@ -22,7 +22,7 @@ var paths = {
     server: './src/server/**/*.js'
   },
   tests: {
-    server: './test/**/*.coffee',
+    server: './test/**/*_test.coffee',
   }
 }
 

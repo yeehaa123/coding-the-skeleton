@@ -1,7 +1,9 @@
 (function(){
   "use strict";
   var server = require('./server');
-  server.start("src/server/content/index.html", "src/server/content/404.html", "9778", function() {
+  var port = process.argv[2];
+  var contentDir = 'src/server/content';
+  server.start(contentDir + "/index.html", contentDir + "/404.html", port, function() {
     console.log("Server Started");
   });
 })();

@@ -1,8 +1,11 @@
 server = require("../src/server/server.js")
 expect = require('chai').expect
 
-http = require('http')
-fs = require('fs')
+helpers = require('./helpers/test_helpers')
+httpGet = helpers.httpGet
+createFile = helpers.createFile
+cleanUpFiles = helpers.cleanUpFiles
+
 PORT = 8080
 
 testDir  = 'generated/test'
@@ -33,16 +36,27 @@ describe 'server', ->
 
 
   describe 'static file serving', -> 
+    expectedHomePageData = "Hello World"
+    expectedErrorPageData = "Page Not Found"
+    
+    before (done) ->
+      createFile(homePageFile, expectedHomePageData)
+      createFile(errorPageFile, expectedErrorPageData)
+      done()
 
+    beforeEach (done) ->
+      server.start homePageFile, errorPageFile, PORT, ->
+        done()
+
+    afterEach (done) ->
+      server.stop ->
+        done()
 
     after (done) ->
       cleanUpFiles([homePageFile, errorPageFile])
       done()
 
     it 'should return homepage when asked for /', (done) ->
-
-      expectedHomePageData = "Hello World"
-      createFile(homePageFile, expectedHomePageData)
 
       httpGet 'http://localhost:8080', (response, responseData) ->
         expect(response.statusCode).to.equal 200
@@ -56,35 +70,7 @@ describe 'server', ->
 
     it 'should return a 404 for everything but homepage', (done) ->
 
-      expectedErrorPageData = "Page Not Found"
-      createFile(errorPageFile, expectedErrorPageData)
-
       httpGet 'http://localhost:8080/blabla', (response, responseData) ->
         expect(response.statusCode).to.equal 404
         expect(responseData).to.equal expectedErrorPageData
         done()
-
-
-createFile = (file, data) ->
-  fs.writeFileSync(file, data)
-  expect(fs.existsSync(file)).to.be.ok
-
-cleanUpFiles = (files) ->
-  files.forEach (file) ->
-    fs.unlinkSync(file)
-    expect(!fs.existsSync(file)).to.be.ok
-
-httpGet = (url, callback) ->
-  server.start homePageFile, errorPageFile, PORT, ->
-    request = http.get url
-
-    request.on 'response', (response) ->
-      receivedData = ""
-      response.setEncoding('utf8')
-
-      response.on 'data', (chunk) -> 
-        receivedData += chunk
-
-      response.on 'end', ->
-        server.stop ->
-          callback(response, receivedData)
