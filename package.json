@@ -19,12 +19,13 @@
     "mkdirp": "~0.3.5",
     "rimraf": "~2.2.6",
     "should": "~3.2.0-beta1",
-    "procfile": "~0.1.1"
+    "procfile": "~0.1.1",
+    "karma": "~0.12.1"
   },
   "author": "Yeehaa",
   "license": "ISC",
   "engines": {
-    "node":  ">= 0.10.25",
+    "node": ">= 0.10.25",
     "npm": ">= 1.4.0"
   }
 }
