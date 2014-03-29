@@ -4,7 +4,7 @@ var fs   = require('fs');
 var http = require('http');
 var server;
 
-exports.start = function(homePageToServe, errorPageToServe, portNumber){
+exports.start = function(homePageToServe, errorPageToServe, portNumber, callback) {
 
   if(!portNumber) throw new Error("Port number is not specified");
   if(!homePageToServe) throw new Error("homepage to serve is not specified");
@@ -22,7 +22,7 @@ exports.start = function(homePageToServe, errorPageToServe, portNumber){
     }
   });
 
-  server.listen(portNumber);
+  server.listen(portNumber, callback);
 };
 
 exports.stop = function(callback){
