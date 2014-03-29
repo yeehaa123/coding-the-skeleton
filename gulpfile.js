@@ -40,7 +40,9 @@ gulp.task('lintJS', function(){
 gulp.task('testServer', ['createTestDir'], function(){
   require('coffee-script/register');
   return gulp.src(paths.tests.server)
-             .pipe(mocha({reporter: 'spec'}))
+             .pipe(mocha({
+               reporter: 'spec',
+              }))
              .on('error', onError);
 });
 

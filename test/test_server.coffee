@@ -75,16 +75,16 @@ cleanUpFiles = (files) ->
     expect(!fs.existsSync(file)).to.be.ok
 
 httpGet = (url, callback) ->
-  server.start(homePageFile, errorPageFile, PORT);
-  request = http.get url
+  server.start homePageFile, errorPageFile, PORT, ->
+    request = http.get url
 
-  request.on 'response', (response) ->
-    receivedData = ""
-    response.setEncoding('utf8')
+    request.on 'response', (response) ->
+      receivedData = ""
+      response.setEncoding('utf8')
 
-    response.on 'data', (chunk) -> 
-      receivedData += chunk
+      response.on 'data', (chunk) -> 
+        receivedData += chunk
 
-    response.on 'end', ->
-      server.stop ->
-        callback(response, receivedData)
+      response.on 'end', ->
+        server.stop ->
+          callback(response, receivedData)
