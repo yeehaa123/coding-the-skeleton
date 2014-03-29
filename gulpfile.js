@@ -67,9 +67,12 @@ gulp.task('watch', function(){
 });
 
 
-gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);
-
-gulp.task('test', ['generateCSS', 'lintJS', 'testServer']);
+function onError(err) {
+  console.log(err.toString());
+  if (watching) {
+    this.emit('end');
+  }
+}
 
 gulp.task('integrate', ['test'], function(){
   console.log("1. Make sure 'git status' is clean.");
@@ -82,9 +85,11 @@ gulp.task('integrate', ['test'], function(){
   console.log("5. 'git checkout master'");
 });
 
-function onError(err) {
-  console.log(err.toString());
-  if (watching) {
-    this.emit('end');
-  }
-}
+gulp.task('deploy', ['test'], function(){
+  console.log("1. Make sure 'git status' is clean.");
+  console.log("2. git push heroku master");
+  console.log("3. Test the release");
+})
+
+gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);
+gulp.task('test', ['generateCSS', 'lintJS', 'testServer']);
