@@ -1,4 +1,4 @@
-server = require("../src/server/server.js")
+server = require("../../src/server/server.js")
 expect = require('chai').expect
 
 helpers = require('./helpers/test_helpers')
