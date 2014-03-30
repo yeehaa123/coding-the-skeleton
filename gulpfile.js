@@ -33,11 +33,26 @@ gulp.task('clean', function(){
       .pipe(clean());
 });
 
-gulp.task('lintJS', function(){
-  return gulp.src(paths.js.all)
-      .pipe(jshint('.jshintrc'))
+gulp.task('createTestDir', function(){
+  if (fs.existsSync('./generated/test')){
+    rimraf.sync('./generated/test');
+  };
+  mkdirp.sync('./generated/test');
+});
+
+gulp.task('lintClient', function(){
+  return gulp.src(paths.js.client)
+      .pipe(jshint('.jshintrc_browser'))
       .pipe(jshint.reporter(stylish))
 });
+
+gulp.task('lintServer', function(){
+  return gulp.src(paths.js.server)
+      .pipe(jshint('.jshintrc_node'))
+      .pipe(jshint.reporter(stylish))
+});
+
+gulp.task('lint', ['lintClient', 'lintServer']);
 
 gulp.task('testServer', ['createTestDir'], function(){
   require('coffee-script/register');
@@ -55,7 +70,6 @@ gulp.task('testClientOnce', function() {
       action: 'run'
     }))
     .on('error', function(err) {
-      // Make sure failed tests cause gulp to exit non-zero
       throw err;
     });
 });
@@ -63,7 +77,7 @@ gulp.task('testClientOnce', function() {
 gulp.task('testClient', function() {
   return gulp.src(paths.tests.client)
     .pipe(karma({
-      configFile: 'karma.conf.js',
+      configFile: 'karma.conf.all.js',
       action: 'watch'
     }));
 });
@@ -74,17 +88,11 @@ gulp.task('generateCSS', function(){
       .pipe(gulp.dest('./build/styles'))
 });
 
-gulp.task('createTestDir', function(){
-  if (fs.existsSync('./generated/test')){
-    rimraf.sync('./generated/test');
-  };
-  mkdirp.sync('./generated/test');
-});
-
 gulp.task('watch', function(){
   watching = true;
   gulp.watch(paths.sass, ['generateCSS']);
-  gulp.watch(paths.js.all, ['lintJS', 'testServer']);
+  gulp.watch(paths.js.server, ['lintServer', 'testServer']);
+  gulp.watch(paths.js.client, ['lintClient']);
   gulp.watch(paths.tests.server, ['testServer']);
 });
 
@@ -113,6 +121,6 @@ gulp.task('deploy', ['test'], function(){
   console.log("3. Test the release");
 })
 
-gulp.task('standard', ['generateCSS', 'lintJS', 'testServer']);
+gulp.task('standard', ['generateCSS', 'lint', 'testServer']);
 gulp.task('test', ['standard', 'testClientOnce']);
 gulp.task('default', ['standard', 'testClient', 'watch']);
