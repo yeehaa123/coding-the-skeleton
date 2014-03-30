@@ -6,13 +6,13 @@ httpGet = helpers.httpGet
 createFile = helpers.createFile
 cleanUpFiles = helpers.cleanUpFiles
 
-PORT = 8080
-
-testDir  = 'generated/test'
-homePageFile = "#{testDir}/homepage.html"
-errorPageFile = "#{testDir}/errorpage.html"
-
 describe 'server', -> 
+  PORT = 8080
+  BASE_URL = "http://localhost:#{PORT}"
+
+  testDir  = 'generated/test'
+  homePageFile = "#{testDir}/homepage.html"
+  errorPageFile = "#{testDir}/errorpage.html"
 
   describe 'basic functionality', (done) ->
 
@@ -57,20 +57,19 @@ describe 'server', ->
       done()
 
     it 'should return homepage when asked for /', (done) ->
-
-      httpGet 'http://localhost:8080', (response, responseData) ->
+      httpGet "#{BASE_URL}", (response, responseData) ->
         expect(response.statusCode).to.equal 200
         expect(responseData).to.equal expectedHomePageData
         done()
 
     it 'should return homepage when asked for index', (done) ->
-      httpGet 'http://localhost:8080/index.html', (response, responseData) ->
+      httpGet "#{BASE_URL}/index.html", (response, responseData) ->
         expect(response.statusCode).to.equal 200
         done()
 
     it 'should return a 404 for everything but homepage', (done) ->
 
-      httpGet 'http://localhost:8080/blabla', (response, responseData) ->
+      httpGet "#{BASE_URL}/vlindex.html", (response, responseData) ->
         expect(response.statusCode).to.equal 404
         expect(responseData).to.equal expectedErrorPageData
         done()
