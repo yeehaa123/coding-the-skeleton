@@ -9,6 +9,7 @@ var sass    = require('gulp-sass');
 var jshint  = require('gulp-jshint');
 var clean   = require('gulp-clean');
 var mocha   = require('gulp-mocha');
+var karma   = require('gulp-karma');
 var stylish = require('jshint-stylish'); 
 var batch   = require('gulp-batch'); 
 
@@ -45,6 +46,26 @@ gulp.task('testServer', ['createTestDir'], function(){
                reporter: 'spec',
               }))
              .on('error', onError);
+});
+
+gulp.task('testClientOnce', function() {
+  return gulp.src(paths.tests.client)
+    .pipe(karma({
+      configFile: 'karma.conf.js',
+      action: 'run'
+    }))
+    .on('error', function(err) {
+      // Make sure failed tests cause gulp to exit non-zero
+      throw err;
+    });
+});
+
+gulp.task('testClient', function() {
+  return gulp.src(paths.tests.client)
+    .pipe(karma({
+      configFile: 'karma.conf.js',
+      action: 'watch'
+    }));
 });
 
 gulp.task('generateCSS', function(){
@@ -92,5 +113,6 @@ gulp.task('deploy', ['test'], function(){
   console.log("3. Test the release");
 })
 
-gulp.task('default', ['generateCSS', 'lintJS', 'testServer', 'watch']);
-gulp.task('test', ['generateCSS', 'lintJS', 'testServer']);
+gulp.task('standard', ['generateCSS', 'lintJS', 'testServer']);
+gulp.task('test', ['standard', 'testClientOnce']);
+gulp.task('default', ['standard', 'testClient', 'watch']);

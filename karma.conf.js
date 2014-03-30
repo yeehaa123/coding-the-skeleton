@@ -6,14 +6,20 @@ module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'chai'],
     files: [
-      'test/client/**/*_test.coffee'
+    //   'test/client/**/*_test.coffee'
     ],
     preprocessors: {
       '**/*.coffee': ['coffee']
     },
     reporters: ['progress'],
     port: 9876,
-    browsers: [],
-    singleRun: false
+    browsers: ['PhantomJS'],
+    plugins: [
+      'karma-mocha',
+      'karma-chai',
+      'karma-coffee-preprocessor',
+      'karma-chrome-launcher',
+      'karma-phantomjs-launcher'
+    ]
   });
 };
