@@ -1,17 +1,16 @@
 'use strict'
 
+var gulp    = require('gulp');
+var clean   = require('gulp-clean');
 var fs      = require('fs');
 var mkdirp  = require('mkdirp');
 var rimraf  = require('rimraf');
-var gulp    = require('gulp');
 var sass    = require('gulp-sass');
 var jshint  = require('gulp-jshint');
-var clean   = require('gulp-clean');
 var mocha   = require('gulp-mocha');
 var karma   = require('gulp-karma');
 var bower   = require('gulp-bower');
 var stylish = require('jshint-stylish'); 
-var batch   = require('gulp-batch'); 
 
 var watching = false;
 
@@ -30,6 +29,7 @@ var paths = {
     server: './test/server/**/*_test.coffee',
     client: [
       'bower_components/jquery/dist/jquery.js',
+      './src/app/app.js',
       './test/client/**/*_test.coffee'
     ]
   }

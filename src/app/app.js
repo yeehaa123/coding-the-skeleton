@@ -1,10 +1,14 @@
-/* globals console */
+/* global cts:true */
+
+cts = {};
+
 (function(){
 
   "use strict";
   
-  window.onload = function(){
-    console.log("HI");
+  cts.initializeApplication = function(){
   };
+
+  return cts;
 
 })();
