@@ -3,13 +3,13 @@
 var fs      = require('fs');
 var mkdirp  = require('mkdirp');
 var rimraf  = require('rimraf');
-
 var gulp    = require('gulp');
 var sass    = require('gulp-sass');
 var jshint  = require('gulp-jshint');
 var clean   = require('gulp-clean');
 var mocha   = require('gulp-mocha');
 var karma   = require('gulp-karma');
+var bower   = require('gulp-bower');
 var stylish = require('jshint-stylish'); 
 var batch   = require('gulp-batch'); 
 
@@ -18,19 +18,31 @@ var watching = false;
 var paths = {
   sass: './src/styles/main.scss',
   js: { 
-    all: ['./src/app/**/*.js','./src/server/**/*.js'],
-    client: './src/app/**/*.js',
-    server: './src/server/**/*.js'
+    client: {
+      app: './src/app/**/*.js',
+      vendor: [
+        'src/vendor/jquery/dist/jquery.js'
+      ],
+    },
+    server: './src/server/**/*.js',
   },
   tests: {
     server: './test/server/**/*_test.coffee',
-    client: './test/client/**/*_test.coffee',
+    client: [
+      'bower_components/jquery/dist/jquery.js',
+      './test/client/**/*_test.coffee'
+    ]
   }
 }
 
 gulp.task('clean', function(){
   return gulp.src(['./build', './generated'], {read: false})
       .pipe(clean());
+});
+
+gulp.task('bower', function() {
+  bower()
+    .pipe(gulp.dest('src/vendor/'))
 });
 
 gulp.task('createTestDir', function(){
@@ -41,7 +53,7 @@ gulp.task('createTestDir', function(){
 });
 
 gulp.task('lintClient', function(){
-  return gulp.src(paths.js.client)
+  return gulp.src(paths.js.client.app)
       .pipe(jshint('.jshintrc_browser'))
       .pipe(jshint.reporter(stylish))
 });
@@ -55,10 +67,10 @@ gulp.task('lintServer', function(){
 gulp.task('lint', ['lintClient', 'lintServer']);
 
 gulp.task('testServer', ['createTestDir'], function(){
-  require('coffee-script/register');
   return gulp.src(paths.tests.server)
              .pipe(mocha({
                reporter: 'spec',
+               compilers: 'coffee:coffee-script'
               }))
              .on('error', onError);
 });
@@ -92,7 +104,7 @@ gulp.task('watch', function(){
   watching = true;
   gulp.watch(paths.sass, ['generateCSS']);
   gulp.watch(paths.js.server, ['lintServer', 'testServer']);
-  gulp.watch(paths.js.client, ['lintClient']);
+  gulp.watch(paths.js.client.app, ['lintClient']);
   gulp.watch(paths.tests.server, ['testServer']);
 });
 
@@ -121,6 +133,6 @@ gulp.task('deploy', ['test'], function(){
   console.log("3. Test the release");
 })
 
-gulp.task('standard', ['generateCSS', 'lint', 'testServer']);
+gulp.task('standard', ['bower', 'generateCSS', 'lint', 'testServer']);
 gulp.task('test', ['standard', 'testClientOnce']);
 gulp.task('default', ['standard', 'testClient', 'watch']);

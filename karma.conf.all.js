@@ -1,7 +1,6 @@
 // Karma configuration
 // Generated on Sat Mar 29 2014 18:50:49 GMT-0400 (EDT)
 
-console.log(__dirname);
 module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'chai'],
@@ -18,6 +17,7 @@ module.exports = function(config) {
       'Chrome',
       'Firefox'
     ],
+    cient: { captureConsole: true },
     plugins: [
       'karma-mocha',
       'karma-chai',
