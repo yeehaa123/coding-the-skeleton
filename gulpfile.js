@@ -11,7 +11,6 @@ var mocha   = require('gulp-mocha');
 var karma   = require('gulp-karma');
 var bower   = require('gulp-bower');
 var stylish = require('jshint-stylish'); 
-var batch   = require('gulp-batch'); 
 
 var watching = false;
 
@@ -29,7 +28,11 @@ var paths = {
   tests: {
     server: './test/server/**/*_test.coffee',
     client: [
+      'src/vendor/angular/angular.js',
+      'src/vendor/angular-mocks/angular-mocks.js',
+      'src/vendor/sinonjs/sinon.js',
       'bower_components/jquery/dist/jquery.js',
+      'src/app/app.js',
       './test/client/**/*_test.coffee'
     ]
   }
