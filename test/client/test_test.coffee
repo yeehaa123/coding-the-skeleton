@@ -1,9 +1,10 @@
-describe 'something', ->
-  it 'is two', ->
-    div = document.createElement('div')
-    div.setAttribute('id', 'tdjs')
-    div.setAttribute('foo', 'bar')
-    document.body.appendChild(div)
+describe 'Application Container', ->
+  it 'should be initialized in predefined div', ->
+    containerDiv = document.createElement('div')
+    containerDiv.setAttribute('id', 'cts-application-container')
+    document.body.appendChild(containerDiv)
 
-    extractedDiv = document.getElementById('tdjs')
-    expect(extractedDiv.getAttribute('foo')).to.equal('bar')
+    cts.initializeApplication()
+
+    extractedDiv = document.getElementById('cts-application-container')
+    expect(extractedDiv).to.be.ok

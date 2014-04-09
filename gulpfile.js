@@ -1,12 +1,12 @@
 'use strict'
 
+var gulp    = require('gulp');
+var clean   = require('gulp-clean');
 var fs      = require('fs');
 var mkdirp  = require('mkdirp');
 var rimraf  = require('rimraf');
-var gulp    = require('gulp');
 var sass    = require('gulp-sass');
 var jshint  = require('gulp-jshint');
-var clean   = require('gulp-clean');
 var mocha   = require('gulp-mocha');
 var karma   = require('gulp-karma');
 var bower   = require('gulp-bower');
