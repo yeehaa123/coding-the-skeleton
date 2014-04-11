@@ -14,5 +14,9 @@
   "unused": false,
   "strict": true,
   "trailing": true,
-  "smarttabs": true
+  "smarttabs": true,
+  "globalstrict": true,
+  "globals": {
+    "angular": true
+  }
 }

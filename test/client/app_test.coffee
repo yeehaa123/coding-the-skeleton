@@ -1,17 +1,27 @@
-describe 'LearnTopicsController', ->
-
+describe 'learnApp', ->
   beforeEach module("learnApp")
 
-  beforeEach inject ($controller, $rootScope) ->
-    @scope = $rootScope.$new()
-    @mockLearnData = sinon.stub({getAllTopics: ->})
-    @controllerConstructor = $controller
+  describe 'LearnTopicsController', ->
 
-  it "should set the scope learnTopics to learnData.getAllTopics", ->
-    learnTopics = [1,2,3];
-    @mockLearnData.getAllTopics.returns learnTopics
+    beforeEach inject ($controller, $rootScope) ->
+      @scope = $rootScope.$new()
+      @mockLearnData = sinon.stub({getAllTopics: ->})
+      @controllerConstructor = $controller
 
-    @controllerConstructor("LearnTopicsController",
-      {$scope: @scope, $location: {}, learnData: @mockLearnData})
+    it "should set the scope learnTopics to learnData.getAllTopics", ->
+      learnTopics = [1,2,3]
+      @mockLearnData.getAllTopics.returns learnTopics
 
-    expect(@scope.learnTopics).to.eql(learnTopics)
+      @controllerConstructor("LearnTopicsController",
+        {$scope: @scope, $location: {}, learnData: @mockLearnData})
+
+      expect(@scope.learnTopics).to.eql(learnTopics)
+
+  describe 'learnData', ->
+
+    beforeEach inject (learnData) ->
+      @learnData = learnData
+
+    it "allows us to get data from the service", ->
+      learnTopics = [1,2,3]
+      expect(@learnData.getAllTopics()).to.eql(learnTopics) 
