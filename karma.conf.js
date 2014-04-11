@@ -8,7 +8,6 @@ module.exports = function(config) {
     //   'test/client/**/*_test.coffee'
     ],
     preprocessors: {
-      'src/app/**/*.js': ['coverage'],
       '**/*.coffee': ['coffee']
     },
     reporters: ['progress', 'coverage'],
@@ -18,7 +17,6 @@ module.exports = function(config) {
       'karma-mocha',
       'karma-chai',
       'karma-coffee-preprocessor',
-      'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-coverage'
     ]
