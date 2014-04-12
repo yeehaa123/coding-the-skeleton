@@ -13,6 +13,7 @@ var protractor = require('gulp-protractor').protractor;
 var bower      = require('gulp-bower');
 var stylish    = require('jshint-stylish'); 
 var server     = require('./src/server/server.js');
+var wd_update  = require('gulp-protractor').webdriver_update; 
 
 var watching = false;
 
@@ -102,7 +103,9 @@ gulp.task('testClient', function() {
     }));
 });
 
-gulp.task('protractor', function() {
+gulp.task('webdriver_update', wd_update);
+
+gulp.task('protractor', ['webdriver_update'], function() {
   return gulp.src(["./src/tests/*spec.coffee"])
       .pipe(protractor({
               configFile: "test/protractor.conf.js",
@@ -166,5 +169,7 @@ gulp.task('deploy', ['test'], function(){
 })
 
 gulp.task('standard', ['bower', 'generateCSS', 'lint', 'testServer']);
-gulp.task('test', ['standard', 'testClientOnce']);
+gulp.task('test', ['standard', 'testClientOnce'], function(){
+  gulp.run('e2e');
+});
 gulp.task('default', ['standard', 'testClient', 'watch']);
