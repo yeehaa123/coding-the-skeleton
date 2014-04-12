@@ -5,8 +5,7 @@ chai.use(chaiAsPromised)
 expect = chai.expect
 
 describe 'index page', ->
-  ptor = protractor.getInstance()
-
   it 'has the right title', ->
-    ptor.get('/#')
+    browser.get('/#')
+    expect(browser.getTitle()).to.eventually.equal "Hello World"
     
