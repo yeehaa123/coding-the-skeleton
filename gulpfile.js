@@ -11,6 +11,7 @@ var mocha   = require('gulp-mocha');
 var karma   = require('gulp-karma');
 var bower   = require('gulp-bower');
 var stylish = require('jshint-stylish'); 
+var nodemon = require('gulp-nodemon');
 
 var watching = false;
 
@@ -109,6 +110,10 @@ gulp.task('watch', function(){
   gulp.watch(paths.js.server, ['lintServer', 'testServer']);
   gulp.watch(paths.js.client.app, ['lintClient']);
   gulp.watch(paths.tests.server, ['testServer']);
+});
+
+gulp.task('develop', function(){
+  nodemon({script: './src/server/coding-the-skeleton.js'}); 
 });
 
 
