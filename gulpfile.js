@@ -1,17 +1,19 @@
 'use strict'
 
-var gulp    = require('gulp');
-var clean   = require('gulp-clean');
-var fs      = require('fs');
-var mkdirp  = require('mkdirp');
-var rimraf  = require('rimraf');
-var sass    = require('gulp-sass');
-var jshint  = require('gulp-jshint');
-var mocha   = require('gulp-mocha');
-var karma   = require('gulp-karma');
-var bower   = require('gulp-bower');
-var stylish = require('jshint-stylish'); 
-var nodemon = require('gulp-nodemon');
+var gulp       = require('gulp');
+var clean      = require('gulp-clean');
+var fs         = require('fs');
+var mkdirp     = require('mkdirp');
+var rimraf     = require('rimraf');
+var sass       = require('gulp-sass');
+var jshint     = require('gulp-jshint');
+var mocha      = require('gulp-mocha');
+var karma      = require('gulp-karma');
+var protractor = require('gulp-protractor').protractor;
+var bower      = require('gulp-bower');
+var stylish    = require('jshint-stylish'); 
+var server     = require('./src/server/server.js');
+var wd_update  = require('gulp-protractor').webdriver_update; 
 
 var watching = false;
 
@@ -35,6 +37,9 @@ var paths = {
       'bower_components/jquery/dist/jquery.js',
       'src/app/app.js',
       './test/client/**/*_test.coffee'
+    ],
+    e2e: [
+      './test/client/**/*_spec.coffee'
     ]
   }
 }
@@ -98,6 +103,21 @@ gulp.task('testClient', function() {
     }));
 });
 
+gulp.task('webdriver_update', wd_update);
+
+gulp.task('protractor', ['webdriver_update'], function() {
+  return gulp.src(["./src/tests/*spec.coffee"])
+      .pipe(protractor({
+              configFile: "test/protractor.conf.js",
+              args: ['--baseUrl', 'http://localhost:3000']
+            })) 
+      .on('error', function(e) { throw e });
+});
+
+gulp.task('e2e', ['startServer', 'protractor'], function(){
+  gulp.run('stopServer');
+});
+
 gulp.task('generateCSS', function(){
   return gulp.src(paths.sass)
       .pipe(sass())
@@ -112,10 +132,17 @@ gulp.task('watch', function(){
   gulp.watch(paths.tests.server, ['testServer']);
 });
 
-gulp.task('develop', function(){
-  nodemon({script: './src/server/coding-the-skeleton.js'}); 
+gulp.task('startServer', function(){
+  server.start('./src/server/content/index.html', './src/server/content/404.html', 3000, function(){
+    console.log("server started on post 3000");
+  });
 });
 
+gulp.task('stopServer', function(){
+  server.stop(function(){
+    console.log("server stopped");
+  });
+});
 
 function onError(err) {
   console.log(err.toString());
@@ -142,5 +169,7 @@ gulp.task('deploy', ['test'], function(){
 })
 
 gulp.task('standard', ['bower', 'generateCSS', 'lint', 'testServer']);
-gulp.task('test', ['standard', 'testClientOnce']);
+gulp.task('test', ['standard', 'testClientOnce'], function(){
+  gulp.run('e2e');
+});
 gulp.task('default', ['standard', 'testClient', 'watch']);

@@ -34,7 +34,8 @@
     "protractor": "~0.21.0",
     "chai-as-promised": "~4.1.1",
     "nodemon": "~1.0.17",
-    "gulp-nodemon": "~1.0.2"
+    "gulp-nodemon": "~1.0.2",
+    "gulp-protractor": "0.0.7"
   },
   "author": "Yeehaa",
   "license": "ISC",

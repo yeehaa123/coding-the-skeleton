@@ -24,6 +24,7 @@ exports.runServer = (params, callback) ->
   child = child_process.spawn params.command, params.options
   child.stdout.setEncoding('utf8')
   child.stdout.on "data", (chunk) ->
+    console.log("Hello")
     callback() if chunk.trim() is "Server Started"
 
 exports.killServer = (callback) ->
