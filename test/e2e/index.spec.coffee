@@ -8,4 +8,3 @@ describe 'index page', ->
   it 'has the right title', ->
     browser.get('/#')
     expect(browser.getTitle()).to.eventually.equal "Hello World"
-    

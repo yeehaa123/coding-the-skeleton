@@ -11,27 +11,27 @@ describe 'server', ->
   BASE_URL = "http://localhost:#{PORT}"
 
   testDir  = 'generated/test'
-  homePageFile = "#{testDir}/homepage.html"
+  homePageFile = "#{testDir}/index.html"
   errorPageFile = "#{testDir}/errorpage.html"
 
   describe 'basic functionality', (done) ->
 
     it 'should throw an exception if port is not specified', (done) ->
-      expect(-> server.start(homePageFile)).to.throw(/Port number is not specified/)
+      expect(-> server.start(testDir)).to.throw(/Port number is not specified/)
       done()
 
     it 'should throw an exception if stop is called twice', (done) ->
-       server.start(homePageFile, errorPageFile, PORT)
+       server.start(testDir, errorPageFile, PORT)
        server.stop()
        expect(-> server.stop()).to.throw(/Not running/)
        done()
 
-    it 'should throw an exception if homepage to serve is not specified', (done) ->
-      expect(-> server.start(null, errorPageFile, PORT)).to.throw(/homepage to serve is not specified/)
+    it 'should throw an exception if directory to serve is not specified', (done) ->
+      expect(-> server.start(null, errorPageFile, PORT)).to.throw(/directory to serve is not specified/)
       done()
 
     it 'should throw an exception if 404 page to serve is not specified', (done) ->
-      expect(-> server.start(homePageFile, null, PORT)).to.throw(/error page to serve is not specified/)
+      expect(-> server.start(testDir, null, PORT)).to.throw(/error page to serve is not specified/)
       done()
 
 
@@ -45,7 +45,7 @@ describe 'server', ->
       done()
 
     beforeEach (done) ->
-      server.start homePageFile, errorPageFile, PORT, ->
+      server.start testDir, errorPageFile, PORT, ->
         done()
 
     afterEach (done) ->

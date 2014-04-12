@@ -51,7 +51,7 @@ gulp.task('clean', function(){
 
 gulp.task('bower', function() {
   bower()
-    .pipe(gulp.dest('src/vendor/'))
+    .pipe(gulp.dest('src/app/vendor/'))
 });
 
 gulp.task('createTestDir', function(){
@@ -133,7 +133,7 @@ gulp.task('watch', function(){
 });
 
 gulp.task('startServer', function(){
-  server.start('./src/server/content/index.html', './src/server/content/404.html', 3000, function(){
+  server.start('./src/app', './src/app/404.html', 3000, function(){
     console.log("server started on post 3000");
   });
 });

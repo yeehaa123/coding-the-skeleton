@@ -1,7 +1,9 @@
 {
   "name": "coding-the-skeleton",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "send": "~0.2.0"
+  },
   "scripts": {
     "test": "gulp test --verbose"
   },
