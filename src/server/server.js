@@ -17,7 +17,7 @@ exports.start = function(contentDir, errorPageToServe, portNumber, callback) {
     send(request, request.url)
       .root(contentDir)
       .on('error', handleError)
-      .pipe(response)
+      .pipe(response);
 
     function handleError(err) {
       if (err.status === 404) serveFile(response, 404, errorPageToServe);

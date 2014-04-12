@@ -21,7 +21,7 @@ var paths = {
   sass: './src/styles/main.scss',
   js: { 
     client: {
-      app: './src/app/**/*.js',
+      app: ['./src/app/**/*.js', '!./src/app/vendor/**/*.js'],
       vendor: [
         'src/vendor/jquery/dist/jquery.js'
       ],
